@@ -1,6 +1,6 @@
 let menuOpcion;
 let bMostrarIdProdListados = false; //Var.booleanas que se utilizaran para decir si se ve el Id.del Producto en los Listados
-let bMostrarRubroListados = true;  //Idem bMostrarIdProdListados, pero para Rubro
+let bMostrarRubroListados = false;  //Idem bMostrarIdProdListados, pero para Rubro
 
 class producto {
     constructor(descripcion = "", precioCosto = 0, utilidad = 0, iva = 0, rubro = 0, stock = 0) {
@@ -213,21 +213,21 @@ function get_TodosLosProducto(arrProductos) {
     let resultado;
     let productosPrompt = "";
     arrProductos.forEach((producto, index) => {
-      //  productosPrompt = productosPrompt + index + ". " + producto.descripcion  + "  [ Id.: " + producto.id + ". Rubro:" + producto.rubro + "]"  + "\n";
-      productosPrompt = productosPrompt + index + ". " + producto.descripcion
-      if (bMostrarIdProdListados || bMostrarRubroListados) {
-          productosPrompt = productosPrompt + "[ "
-      }
-      if (bMostrarIdProdListados) {
-          productosPrompt = productosPrompt + " Id.: " + producto.id;
-      }
-      if (bMostrarRubroListados) {
-          productosPrompt = productosPrompt + ". Rubro: " + producto.rubro;
-      }
-      if (bMostrarIdProdListados || bMostrarRubroListados) {
-          productosPrompt = productosPrompt + " ]"
-      }
-      productosPrompt = productosPrompt + "\n"
+        //  productosPrompt = productosPrompt + index + ". " + producto.descripcion  + "  [ Id.: " + producto.id + ". Rubro:" + producto.rubro + "]"  + "\n";
+        productosPrompt = productosPrompt + index + ". " + producto.descripcion
+        if (bMostrarIdProdListados || bMostrarRubroListados) {
+            productosPrompt = productosPrompt + "[ "
+        }
+        if (bMostrarIdProdListados) {
+            productosPrompt = productosPrompt + " Id.: " + producto.id;
+        }
+        if (bMostrarRubroListados) {
+            productosPrompt = productosPrompt + ". Rubro: " + producto.rubro;
+        }
+        if (bMostrarIdProdListados || bMostrarRubroListados) {
+            productosPrompt = productosPrompt + " ]"
+        }
+        productosPrompt = productosPrompt + "\n"
 
     }
     )
@@ -260,8 +260,9 @@ function filtradoXdescripcion(par_arrProductos) {
 
 function filtradoXRubro(par_arrProductos) {
     let resultado = false;
+    let productoBuscar;
     do {
-        let productoBuscar = prompt("Ingrese el Id. del rubro a Buscar \n 1: Almacen \n 2: Carniceria \n 3:Panaderia \n 4:General");
+        productoBuscar = prompt("Ingrese el Id. del rubro a Buscar \n 1: Almacen \n 2: Carniceria \n 3:Panaderia \n 4:General");
 
         if (productoBuscar == null) {
             return [];
@@ -381,7 +382,7 @@ function get_ProductoXFiltrado(arrProductos, funcioFiltrado) {
         productosPrompt = productosPrompt + "\n"
 
         //productosPrompt = productosPrompt + index + ". " + producto.descripcion + "  [ Id.: " + producto.id + ". Rubro:" + producto.rubro + "]" + "\n";
-        
+
     }
     );
 
@@ -435,7 +436,7 @@ function busquedaMultipleEnProductos(arrProductos) {
 }
 
 function sortArray(par_arrProductos) {
-    let resultado  = false;
+    let resultado = false;
     do {
 
 
@@ -453,7 +454,7 @@ function sortArray(par_arrProductos) {
                     case 1:
                         par_arrProductos.sort((a, b) => {
                             if (a.descripcion.toLowerCase() > b.descripcion.toLowerCase()) {
-                          
+
                                 return 1;
                             }
                             if (a.descripcion.toLowerCase() < b.descripcion.toLowerCase()) {
@@ -461,13 +462,13 @@ function sortArray(par_arrProductos) {
                             }
                             // a es igual a b
                             return 0;
-                          })
-                          resultado = true;
-                          break;
+                        })
+                        resultado = true;
+                        break;
                     case 2:
                         par_arrProductos.sort((a, b) => {
                             if (a.rubro > b.rubro) {
-                          
+
                                 return 1;
                             }
                             if (a.rubro < b.rubro) {
@@ -475,14 +476,15 @@ function sortArray(par_arrProductos) {
                             }
                             // a es igual a b
                             return 0;
-                          })
-                          resultado = true;
-                          break;
+                        })
+                        bMostrarRubroListados = true;
+                        resultado = true;
+                        break;
 
                     case 3:
                         par_arrProductos.sort((a, b) => {
                             if (a.id > b.id) {
-                          
+
                                 return 1;
                             }
                             if (a.id < b.id) {
@@ -490,11 +492,12 @@ function sortArray(par_arrProductos) {
                             }
                             // a es igual a b
                             return 0;
-                          })
-                          resultado = true;
-                          break;
+                        })
+                        bMostrarIdProdListados = true;
+                        resultado = true;
+                        break;
 
-                } 
+                }
             } else {
                 alert("Indique una Opcion valida. \n Para salir presione en Cancelar")
             }
@@ -502,16 +505,16 @@ function sortArray(par_arrProductos) {
         }
 
     } while (resultado === false)
-    
-    if (resultado) { return 1};
+
+    if (resultado) { return 1 };
 
 }
 
-function configuraciones () {
-    
-    bMostrarIdProdListados = confirm("Configuracion modo visualizacion Lista de Producto. \n ¿DESEA QUE SE VISUALICE EL ID. DEL PRODUCTO?");
+function configuraciones() {
 
-    bMostrarRubroListados = confirm("Configuracion modo visualizacion Lista de Producto. \n ¿DESEA QUE SE VISUALICE EL RUBRO DEL PRODUCTO?");
+    bMostrarIdProdListados = confirm("Configuracion modo visualizacion Lista de Producto. \n ¿Desea que se visualice el  ID. del Producto? \n Si: Boton Aceptar  No: Boton Cancelar");
+
+    bMostrarRubroListados = confirm("Configuracion modo visualizacion Lista de Producto. \n ¿Desea que se visualice el  RUBRO del Producto? \n Si: Boton Aceptar  No: Boton Cancelar");
 
 
 }
@@ -525,7 +528,7 @@ while (getOpcionMenu() != -1) {
     switch (menuOpcion) {
         case 1:     //Alta
             newProducto(arrProductos);
-            
+
             break;
         case 2:     //Eliminar
             i = busquedaMultipleEnProductos(arrProductos);
@@ -552,10 +555,7 @@ while (getOpcionMenu() != -1) {
             break;
 
         case 5:     //Sort
-            //Ordenar por Id.Producto, Descripcion o Rubro
-            let auxResul = sortArray(arrProductos);
-            alert("auxResul: " + auxResul);
-            if (auxResul == 1)  {
+            if (sortArray(arrProductos) === 1) {
                 get_TodosLosProducto(arrProductos);
             }
             break;
