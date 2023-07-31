@@ -1,6 +1,7 @@
 let menuOpcion;
 let bMostrarIdProdListados = false; //Var.booleanas que se utilizaran para decir si se ve el Id.del Producto en los Listados
 let bMostrarRubroListados = false;  //Idem bMostrarIdProdListados, pero para Rubro
+let sortSetNro = 1;     //Va a indicar como esta seteado el ordenamiento del array. Por default 1: x Descripcion del Producto
 
 class producto {
     constructor(descripcion = "", precioCosto = 0, utilidad = 0, iva = 0, rubro = 0, stock = 0) {
@@ -212,6 +213,7 @@ function getOpcionMenu() {
 function get_TodosLosProducto(arrProductos) {
     let resultado;
     let productosPrompt = "";
+    sortArray(arrProductos);    //Se ordena el array x si hubo alguna modificacion segun la variable global "sortSetNro" 
     arrProductos.forEach((producto, index) => {
         //  productosPrompt = productosPrompt + index + ". " + producto.descripcion  + "  [ Id.: " + producto.id + ". Rubro:" + producto.rubro + "]"  + "\n";
         productosPrompt = productosPrompt + index + ". " + producto.descripcion
@@ -364,6 +366,8 @@ function get_ProductoXFiltrado(arrProductos, funcioFiltrado) {
         return (-1);
     }
 
+    sortArray(arrProductos);    //Se ordena el array x si hubo alguna modificacion segun la variable global "sortSetNro" 
+
     //a continuacion se carga el String Prompt para que el usuario seleccione por un numero
     arrProductosInclude.forEach((producto, index) => {
         productosPrompt = productosPrompt + index + ". " + producto.descripcion
@@ -435,7 +439,7 @@ function busquedaMultipleEnProductos(arrProductos) {
     }
 }
 
-function sortArray(par_arrProductos) {
+function getOpcionSort() {
     let resultado = false;
     do {
 
@@ -450,54 +454,8 @@ function sortArray(par_arrProductos) {
             menuOpcion = parseInt(menuOpcion);  //Si hago antes el ParseInt no puedo validar el Boton Cancel
 
             if (menuOpcion >= 1 && menuOpcion <= 3) {
-                switch (menuOpcion) {
-                    case 1:
-                        par_arrProductos.sort((a, b) => {
-                            if (a.descripcion.toLowerCase() > b.descripcion.toLowerCase()) {
-
-                                return 1;
-                            }
-                            if (a.descripcion.toLowerCase() < b.descripcion.toLowerCase()) {
-                                return -1;
-                            }
-                            // a es igual a b
-                            return 0;
-                        })
-                        resultado = true;
-                        break;
-                    case 2:
-                        par_arrProductos.sort((a, b) => {
-                            if (a.rubro > b.rubro) {
-
-                                return 1;
-                            }
-                            if (a.rubro < b.rubro) {
-                                return -1;
-                            }
-                            // a es igual a b
-                            return 0;
-                        })
-                        bMostrarRubroListados = true;
-                        resultado = true;
-                        break;
-
-                    case 3:
-                        par_arrProductos.sort((a, b) => {
-                            if (a.id > b.id) {
-
-                                return 1;
-                            }
-                            if (a.id < b.id) {
-                                return -1;
-                            }
-                            // a es igual a b
-                            return 0;
-                        })
-                        bMostrarIdProdListados = true;
-                        resultado = true;
-                        break;
-
-                }
+                sortSetNro = menuOpcion;    //Se seta variable global para ver como se ordena el array cada vez que se muestra el contenido.
+                resultado = true;
             } else {
                 alert("Indique una Opcion valida. \n Para salir presione en Cancelar")
             }
@@ -509,6 +467,67 @@ function sortArray(par_arrProductos) {
     if (resultado) { return 1 };
 
 }
+
+function sortArray(par_arrProductos) {
+    let resultado = false;
+    if (sortSetNro >= 1 && sortSetNro <= 3) {
+        switch (sortSetNro) {
+            case 1:
+                par_arrProductos.sort((a, b) => {
+                    if (a.descripcion.toLowerCase() > b.descripcion.toLowerCase()) {
+
+                        return 1;
+                    }
+                    if (a.descripcion.toLowerCase() < b.descripcion.toLowerCase()) {
+                        return -1;
+                    }
+                    // a es igual a b
+                    return 0;
+                })
+                resultado = true;
+                break;
+            case 2:
+                par_arrProductos.sort((a, b) => {
+                    if (a.rubro > b.rubro) {
+
+                        return 1;
+                    }
+                    if (a.rubro < b.rubro) {
+                        return -1;
+                    }
+                    // a es igual a b
+                    return 0;
+                })
+                bMostrarRubroListados = true;
+                resultado = true;
+                break;
+
+            case 3:
+                par_arrProductos.sort((a, b) => {
+                    if (a.id > b.id) {
+
+                        return 1;
+                    }
+                    if (a.id < b.id) {
+                        return -1;
+                    }
+                    // a es igual a b
+                    return 0;
+                })
+                bMostrarIdProdListados = true;
+                resultado = true;
+                break;
+
+        }
+    } else {
+        alert("El ordenamiento del array está seteado en una opcion no contemplada.")
+    }
+
+
+
+}
+
+
 
 function configuraciones() {
 
@@ -555,9 +574,13 @@ while (getOpcionMenu() != -1) {
             break;
 
         case 5:     //Sort
-            if (sortArray(arrProductos) === 1) {
+            if (getOpcionSort()) {
+                sortArray(arrProductos);
                 get_TodosLosProducto(arrProductos);
             }
+            // if (sortArray(arrProductos) === 1) {
+            //     get_TodosLosProducto(arrProductos);
+            // }
             break;
         case 6:
             configuraciones();
